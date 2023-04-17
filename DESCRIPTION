@@ -1,0 +1,15 @@
+Package: chemmap
+Type: Package
+Title: Draws ChemMaps
+Version: 0.1.1
+Author: Francesco Napolitano
+Maintainer: Francesco Napolitano <francesco.napolitano@unisannio.it>
+Description: Draws ChemMaps
+    A ChemMap is a 2D visualization of a set of small molecules, each
+    represented as the corresponding two-dimensional structure. This package
+    provides function to generate a ggplot layer based on such representation.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Depends: ggplot2, ggimage, grid, ChemmineR
+
