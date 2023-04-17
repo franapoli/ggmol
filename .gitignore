@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+<<<<<<< HEAD
+=======
+scrape.R
+>>>>>>> c064bff (First commit, working prototype.)
