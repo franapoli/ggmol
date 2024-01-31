@@ -1,0 +1,97 @@
+---
+  output: github_document
+---
+
+# ChemMap
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(chemmap)
+library(ChemmineR)
+library(ggforce)
+library(MASS)
+set.seed(1)
+```
+
+```{r}
+example_set <- c(
+  "diindolylmethane" =        "C(c1c[nH]c2ccccc12)c1c[nH]c2ccccc12",
+  "tetrabromobenzotriazole" = "Brc1c(Br)c(Br)c2[nH]nnc2c1Br",
+  "aminolevulinic-acid" =     "NCC(=O)CCC(O)=O",
+  "fluorouracil" =            "Fc1c[nH]c(=O)[nH]c1=O",
+  "A-443654" =                "CC1=C2C=C(C=CC2=NN1)C3=CC(=CN=C3)OC[C@H](CC4=CNC5=CC=CC=C54)N",
+  "A-66" =                    "Cc1nc(NC(=O)N2CCC[C@H]2C(N)=O)sc1-c1csc(n1)C(C)(C)C",
+  "A-769662" =                "Oc1ccccc1-c1ccc(cc1)-c1csc2[nH]c(=O)c(C#N)c(O)c12",
+  "abacavir" =                "Nc1nc(NC2CC2)c2ncn(C3C[C@H](CO)C=C3)c2n1",
+  "abiraterone-acetate" =     "CC(=O)O[C@H]1CC[C@]2(C)[C@@H]3CC[C@@]4(C)[C@@H](CC=C4c4cccnc4)[C@H]3CC=C2C1",
+  "ABT-202" =                 "NC1CCN(C1)c1cccnc1"
+)
+
+chemms <- chemmol(smiles=new("SMIset", smilist=as.list(example_set)))
+fprints_2d <- sammon(dist(chemms))$points
+clusters <- kmeans(fprints_2d, 4)$cluster
+```
+
+
+
+```{r}
+tab <- data.frame(
+  x = fprints_2d[,1],
+  y = fprints_2d[,2],
+  name = names(example_set),
+  smiles = example_set,
+  Cluster= as.factor(clusters)
+)
+```
+
+
+```{r}
+ggplot(tab, aes(x, y, smiles=smiles, chemsize=.1)) +
+  geom_chemmap(showatoms=F)+
+  theme_bw()+
+  labs(title="ChemMap example")+
+  lims(x=c(-140, 200), y=c(-190, 190))+
+  geom_mark_ellipse(aes(colour=Cluster, smiles=NULL), expand = .06)+
+  theme(aspect.ratio=1)
+```
+
+
+```{r}
+library(ggrepel)
+ggplot(tab, aes(x, y, smiles=smiles, colour=Cluster, label=name, chemsize=.1)) +
+  geom_chemmap(resolution=150, showatoms=F)+
+  labs(title="ChemMap example")+
+  geom_label_repel(nudge_y=-20, size=2.5)+
+  lims(x=c(-140, 210))+
+  theme(aspect.ratio=1)
+```
+
+
+```{r}
+scores <- sort(runif(nrow(tab)))
+```
+
+```{r}
+ggplot(tab, aes(x=1:nrow(tab), y=scores, smiles=smiles,
+                label=name, chemsize=.1, fill=Cluster)) +
+  geom_bar(stat="identity")+
+  geom_chemmap(y=scores+.08, showatoms=F) +
+  theme_classic()+
+  labs(title="ChemMap example", y="Scores", x="Molecules")+
+  ylim(0,1.05)+
+  theme(aspect.ratio=1)+
+  scale_x_continuous(breaks=1:nrow(tab), labels=tab$name)+
+  coord_flip()
+```
+
+
+```{r}
+ggplot(tab, aes(0, 0, smiles=smiles, colour=Cluster, label=name, chemsize=.7)) +
+  geom_chemmap()+
+  theme_no_axes()+
+  geom_text(label=paste("Score:", round(scores, 3)), x=Inf, y=-Inf, vjust=-.5, hjust=1.1, size=2.5, colour="black")+
+  facet_wrap(~name)+
+  theme(aspect.ratio=1)
+```
+
+

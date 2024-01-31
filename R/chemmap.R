@@ -1,7 +1,8 @@
 
 
 generate_chem_glyphs <- function(smiles, outdir=tempdir(),
-                                 bondcol="black", showatoms, ...){
+                                 bondcol="black", showatoms, resolution=200,
+                                 ...){
   s <- list()
   fnames <- list()
   for(i in 1:length(smiles)) {
@@ -21,7 +22,7 @@ generate_chem_glyphs <- function(smiles, outdir=tempdir(),
       if(length(bondcol) > 1){
         col <- bondcol[i]} else {col <- bondcol}
       fnames[[i]] <- paste0(tempfile("chemmap_glyph_"), ".png")
-      png(width = 200, height = 200, fnames[[i]])
+      png(width = resolution, height = resolution, fnames[[i]])
       par(bg=NA, mar = rep(0, 4))
       nbonds <- strsplit(s[[1]]@header["Counts_Line"], "\\s+")[[1]][3]
       atomnames <- unique(gsub("_.*", "", rownames(atomblock(s[[1]]))))
@@ -41,14 +42,15 @@ generate_chem_glyphs <- function(smiles, outdir=tempdir(),
 GeomChemMap <- ggproto(
   "ChemMap", Geom,
   default_aes = aes(colour = "black", fill="black", alpha=1,
-                    chemsize=.05, showatoms=T),
+                    chemsize=.05, showatoms=T, resolution=200),
   required_aes = c("x", "y", "smiles"),
   draw_key = draw_key_image,
   draw_group = function(data, panel_params, coord) {
     coords <- coord$transform(data, panel_params)
     image_files <- generate_chem_glyphs(data$smiles,
                                         bondcol = coords$colour,
-                                        showatoms = data$showatoms)
+                                        showatoms = data$showatoms,
+                                        resolution = data$resolution)
     myImage <- png::readPNG(image_files)
     rasterGrob(myImage, x=coords$x, y=coords$y,
                width=data$chemsize, height=data$chemsize)
@@ -105,6 +107,7 @@ chemmol <- setClass("chemmol",
                     )
 )
 
+
 setMethod(initialize, "chemmol", function(.Object, sdf=NULL, smiles=NULL, ...) {
   if(is.null(sdf) && is.null(smiles))
     stop("at least one of sdf or smiles must be non-NULL")
@@ -132,12 +135,16 @@ setMethod(initialize, "chemmol", function(.Object, sdf=NULL, smiles=NULL, ...) {
   callNextMethod(...)
 })
 
+#' Title
+#'
+#' @export
 setMethod("dist",
           signature(x = "chemmol"),
           function (x, method = "FP2")
           {
+            print("running dist")
             M <- fingerprintOB(x@sdf, "FP2")@fpma
-            dist(M, "manhattan")
+            stats::dist(M, "manhattan")
           }
 )
 

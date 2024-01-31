@@ -11,5 +11,5 @@ Description: Draws ChemMaps
 License: MIT
 Encoding: UTF-8
 LazyData: true
-Depends: ggplot2, ggimage, grid, ChemmineR
-
+Depends: ggplot2, ggimage, grid, ChemmineR, ChemmineOB
+RoxygenNote: 7.2.3
