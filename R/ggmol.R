@@ -33,13 +33,13 @@ generate_chem_glyphs <- function(smiles, outdir = tempdir(), bond_col = "black",
       }
       fnames[[i]] <- paste0(tempfile("chemmap_glyph_"), ".png")
       png(width = resolution, height = resolution, fnames[[i]])
-      par(bg = NA, mar = rep(0, 4))
+      par(bg = NA, mar = rep(0, 4), oma = c(0, 0, 0, 0), xpd = NA)
       nbonds <- strsplit(s[[1]]@header["Counts_Line"], "\\s+")[[1]][3]
       atom_names <- unique(gsub("_.*", "", rownames(atomblock(s[[1]]))))
       if (!show_atoms) {
-        ChemmineR::plot(s, colbonds = 1:nbonds, bondcol = col, asp = 1, no_print_atoms = atom_names, ...)
+        ChemmineR::plot(s, colbonds = 1:nbonds, bondcol = col, asp = 1, no_print_atoms = atom_names, regenCoords=T, ...)
       } else {
-        ChemmineR::plot(s, colbonds = 1:nbonds, bondcol = col, asp = 1, ...)
+        ChemmineR::plot(s, colbonds = 1:nbonds, bondcol = col, asp = 1, regenCoords=T, ...)
       }
       dev.off()
     }
@@ -69,7 +69,7 @@ generate_chem_glyphs <- function(smiles, outdir = tempdir(), bond_col = "black",
 #' ggplot(df, aes(x, y, smiles = smiles)) +
 #'   geom_mol()
 geom_mol <- function(mapping = NULL, data = NULL, stat = "identity", position = "identity", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...) {
-  file.remove(list.files(tempdir(), pattern = "chemmap_glyph.*.png", full.names = TRUE))
+  #file.remove(list.files(tempdir(), pattern = "chemmap_glyph.*.png", full.names = TRUE))
   layer(
     geom = GeomMol, mapping = mapping, data = data, stat = stat, position = position, show.legend = show.legend, inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
@@ -81,12 +81,14 @@ geom_mol <- function(mapping = NULL, data = NULL, stat = "identity", position = 
 #' The ggproto object defining the GeomMol for ggplot2.
 GeomMol <- ggproto(
   "GeomMol", Geom,
-  default_aes = aes(colour = "black", fill = "black", alpha = 1, chemsize = .05, show_atoms = TRUE, resolution = 200),
-  required_aes = c("x", "y", "smiles"),
+  default_aes = aes(colour = "black", fill = "black", image_files=NULL, alpha = 1, chemsize = .05, show_atoms = TRUE, resolution = 200),
+  required_aes = c("x", "y"),
   draw_key = draw_key_image,
   draw_group = function(data, panel_params, coord) {
     coords <- coord$transform(data, panel_params)
+    if(is.null(data$image_files)){
     image_files <- generate_chem_glyphs(data$smiles, bond_col = coords$colour, show_atoms = data$show_atoms, resolution = data$resolution)
+    } else image_files <- data$image_files
     myImage <- png::readPNG(image_files)
     rasterGrob(myImage, x = coords$x, y = coords$y, width = data$chemsize, height = data$chemsize)
   }

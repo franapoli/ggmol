@@ -34,7 +34,7 @@ example_set <- x[w, "canonical_smiles"]
 names(example_set) <- x[w, "pert_iname"]
 dups <- which(duplicated(names(example_set)))
 if (any(dups)) example_set <- example_set[-dups]
-chemms <- chemmol(smiles=new("SMIset", smilist=as.list(example_set)))
+chemms <- Chemmol(smiles=new("SMIset", smilist=as.list(example_set)))
 ```
 
 ```{r}
@@ -43,8 +43,11 @@ tab <- data.frame(
   smiles = example_set
 )
 
-ggplot(tab, aes(0, 0, smiles=smiles, label=name, chemsize=.7)) +
-  geom_chemmap()+
+a <- generate_chem_glyphs(tab$smiles, atomcex=2.5, resolution=300)
+
+
+ggplot(tab, aes(0, 0, image_files=a, smiles=smiles, label=name, chemsize=2/3)) +
+  geom_mol()+
   theme_no_axes()+
   facet_wrap(~name)+
   theme(aspect.ratio=1)
@@ -68,8 +71,8 @@ tab <- data.frame(
 
 ## 2D embedding based on structural distance
 
-```{r fig.height=6, fig.width=6}
-ggplot(tab, aes(x, y, smiles=smiles, chemsize=.1)) +
+```{r}
+ggplot(tab, aes(x, y, smiles=smiles, chemsize=.06)) +
   geom_mol(show_atoms=F)+
   theme_bw()+
   labs(title="ChemMap example")+
@@ -79,23 +82,24 @@ ggplot(tab, aes(x, y, smiles=smiles, chemsize=.1)) +
 ```
 
 
-```{r fig.height=8, fig.width=8}
+```{r fig.height=6, fig.width=6}
 library(ggrepel)
 ggplot(tab, aes(x, y, smiles=smiles, colour=Cluster, label=name, chemsize=.08)) +
   geom_mol(resolution=150, show_atoms=F)+
   labs(title="ChemMap example")+
-  geom_label_repel( size=2.5, point.padding=30)+
+  geom_label_repel( size=2.5, point.padding=17)+
   lims(x=c(-100, 100), y=c(-35, 30))+
   theme(aspect.ratio=1)
 ```
 ## Ranking molecules
 
 ```{r fig.height=6, fig.width=8}
+scores <- as.matrix(moldists)[1,]
 
 ggplot(tab[order(scores),], aes(x=1:nrow(tab), y=sort(scores)+1, smiles=smiles,
                 label=name, chemsize=.1, fill=Cluster)) +
   geom_bar(stat="identity")+
-  geom_chemmap(y=sort(scores)+13, showatoms=F) +
+  geom_mol(y=sort(scores)+13, show_atoms=F) +
   theme_classic()+
   labs(title="ChemMap example", y="Scores", x="Molecules")+
   ylim(0, 180)+
@@ -111,10 +115,10 @@ ggplot(tab[order(scores),], aes(x=1:nrow(tab), y=sort(scores)+1, smiles=smiles,
 library(ggpmisc)
 
 
-scores <- as.matrix(moldists)[1,]
+
   
 ggplot(tab, aes(0, 0, smiles=smiles, colour=Cluster, label=name, chemsize=.9, resolution=300)) +
-  geom_chemmap()+
+  geom_mol()+
   theme_no_axes()+
   geom_text(label=paste("Score:", round(scores, 3)),
             x=Inf, y=-Inf, vjust=-.5, hjust=1.1,
