@@ -5,7 +5,6 @@
 \title{Generate Chemical Glyphs}
 \usage{
 generate_chem_glyphs(
-  names,
   smiles,
   outdir = tempdir(),
   bond_col = "black",
