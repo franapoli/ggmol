@@ -33,7 +33,7 @@ generate_chem_glyphs <- function(smiles, outdir = tempdir(), bond_col = "black",
       }
       fnames[[i]] <- paste0(tempfile("chemmap_glyph_"), ".png")
       png(width = resolution, height = resolution, fnames[[i]])
-      par(bg = NA, mar = rep(0, 4), oma = c(0, 0, 0, 0), xpd = NA)
+      par(bg = NA, mar = rep(0, 4))
       nbonds <- strsplit(s[[1]]@header["Counts_Line"], "\\s+")[[1]][3]
       atom_names <- unique(gsub("_.*", "", rownames(atomblock(s[[1]]))))
       if (!show_atoms) {

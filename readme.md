@@ -3,23 +3,14 @@
 
 ``` r
 example_set <- c(
-Diazepam = "Diazepam",
-Lorazepam = "Lorazepam",
-Clonazepam = "Clonazepam",
-Lisinopril = "Lisinopril",
-Enalapril = "Enalapril",
-Ramipril = "Ramipril"
-#Quinapril = "Quinapril"
-#Benazepril = "Benazepril"
+Diazepam = "CN1c2ccc(Cl)cc2C(=NCC1=O)c1ccccc1",
+Lorazepam = "OC1N=C(c2ccccc2Cl)c2cc(Cl)ccc2NC1=O",
+Clonazepam = "[O-][N+](=O)c1ccc2NC(=O)CN=C(c3ccccc3Cl)c2c1",
+Lisinopril = "NCCCC[C@H](N[C@@H](CCc1ccccc1)C(O)=O)C(=O)N1CCC[C@H]1C(O)=O",
+Enalapril = "CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1CCC[C@H]1C(O)=O",
+Ramipril = "CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1[C@H]2CCC[C@H]2C[C@H]1C(O)=O"
 )
 
-x <- read.csv("/Users/francesco/datapool/git/BAT-drugs/data/in/GSE70138_Broad_LINCS_pert_info.txt", sep="\t")
-w <- which(tolower(x$pert_iname) %in% tolower(names(example_set)))
-example_set <- x[w, "canonical_smiles"]
-#example_set <- gsub("\\\\|/", "", x[w, "canonical_smiles"])
-names(example_set) <- x[w, "pert_iname"]
-dups <- which(duplicated(names(example_set)))
-if (any(dups)) example_set <- example_set[-dups]
 chemms <- Chemmol(smiles=new("SMIset", smilist=as.list(example_set)))
 ```
 
@@ -29,7 +20,7 @@ tab <- data.frame(
   smiles = example_set
 )
 
-a <- generate_chem_glyphs(tab$smiles, atomcex=2)
+a <- generate_chem_glyphs(tab$smiles, atomcex=1.8)
 
 
 ggplot(tab, aes(0, 0, image_files=a, smiles=smiles, label=name, chemsize=2/3)) +
@@ -39,7 +30,7 @@ ggplot(tab, aes(0, 0, image_files=a, smiles=smiles, label=name, chemsize=2/3)) +
   theme(aspect.ratio=1)
 ```
 
-![](readme_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+<img src="readme_files/figure-gfm/unnamed-chunk-2-1.png" width="4800" />
 
 ``` r
 moldists <- dist(chemms)
@@ -71,7 +62,7 @@ tab <- data.frame(
 ## 2D embedding based on structural distance
 
 ``` r
-ggplot(tab, aes(x, y, smiles=smiles, chemsize=.06)) +
+ggplot(tab, aes(x, y, smiles=smiles, chemsize=.1)) +
   geom_mol(show_atoms=F)+
   theme_bw()+
   labs(title="ChemMap example")+
@@ -86,7 +77,7 @@ ggplot(tab, aes(x, y, smiles=smiles, chemsize=.06)) +
     ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
     ## generated.
 
-![](readme_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+<img src="readme_files/figure-gfm/unnamed-chunk-4-1.png" width="4800" />
 
 ``` r
 library(ggrepel)
@@ -98,8 +89,8 @@ ggplot(tab, aes(x, y, smiles=smiles, colour=Cluster, label=name, chemsize=.08)) 
   theme(aspect.ratio=1)
 ```
 
-![](readme_files/figure-gfm/unnamed-chunk-5-1.png)<!-- --> \## Ranking
-molecules
+<img src="readme_files/figure-gfm/unnamed-chunk-5-1.png" width="4800" />
+\## Ranking molecules
 
 ``` r
 scores <- as.matrix(moldists)[1,]
@@ -115,7 +106,7 @@ ggplot(tab[order(scores),], aes(x=1:nrow(tab), y=sort(scores)+1, smiles=smiles,
   scale_x_continuous(breaks=1:nrow(tab), labels=tab$name)
 ```
 
-![](readme_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+<img src="readme_files/figure-gfm/unnamed-chunk-6-1.png" width="1200" />
 
 ``` r
   #coord_flip()
@@ -150,7 +141,7 @@ library(ggpmisc)
     ##   as.character.polynomial polynom
 
 ``` r
-ggplot(tab, aes(0, 0, smiles=smiles, colour=Cluster, label=name, chemsize=.9, resolution=300)) +
+ggplot(tab, aes(0, 0, smiles=smiles, colour=Cluster, label=name, chemsize=.8, resolution=300)) +
   geom_mol()+
   theme_no_axes()+
   geom_text(label=paste("Score:", round(scores, 3)),
@@ -160,4 +151,4 @@ ggplot(tab, aes(0, 0, smiles=smiles, colour=Cluster, label=name, chemsize=.9, re
   theme(aspect.ratio=1)
 ```
 
-![](readme_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+<img src="readme_files/figure-gfm/unnamed-chunk-7-1.png" width="1200" />
