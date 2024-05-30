@@ -1,12 +1,6 @@
 ---
 output:
   github_document
-header-includes:
-   - '<style>
-        table img {
-          background-color: transparent;
-        }
-      </style>'
 ---
 
 # ggmol

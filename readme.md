@@ -1,6 +1,4 @@
 
-<style> table img { background-color: transparent; } </style>
-
 # ggmol
 
 ggmol is an R package designed for creating publication ready
