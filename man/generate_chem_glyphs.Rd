@@ -10,6 +10,8 @@ generate_chem_glyphs(
   bond_col = "black",
   show_atoms = TRUE,
   resolution = 200,
+  node_background_color = rgb(1, 1, 1, 1),
+  font_size = 5,
   ...
 )
 }
