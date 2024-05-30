@@ -170,7 +170,7 @@ tab <- data.frame(
 )
 
 # Generate molecular glyphs and store file paths
-image_files <- generate_chem_glyphs(tab$smiles)
+image_files <- generate_chem_glyphs(tab$smiles, outdir = "example_images")
 
 
 # Convert the image file paths to Markdown image links
@@ -184,9 +184,9 @@ knitr::kable(tab, format = "markdown", col.names = c("Name", "SMILES", "Structur
 
 | Name       | SMILES                                                                             | Structure                                                                                                                              |
 |:-----------|:-----------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------|
-| Diazepam   | CN1c2ccc(Cl)cc2C(=NCC1=O)c1ccccc1                                                  | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpiGpeZe/chemmap_glyph_1776c756ce4de.png" alt="Diazepam" width="100"/>   |
-| Lorazepam  | OC1N=C(c2ccccc2Cl)c2cc(Cl)ccc2NC1=O                                                | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpiGpeZe/chemmap_glyph_1776c4025e70c.png" alt="Lorazepam" width="100"/>  |
-| Clonazepam | \[O-\]\[N+\](=O)c1ccc2NC(=O)CN=C(c3ccccc3Cl)c2c1                                   | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpiGpeZe/chemmap_glyph_1776c7863e5ba.png" alt="Clonazepam" width="100"/> |
-| Lisinopril | NCCCC[C@H](N%5BC@@H%5D(CCc1ccccc1)C(O)=O)C(=O)N1CCC\[<C@H>\]1C(O)=O                | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpiGpeZe/chemmap_glyph_1776c667f5415.png" alt="Lisinopril" width="100"/> |
-| Enalapril  | CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1CCC\[<C@H>\]1C(O)=O                      | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpiGpeZe/chemmap_glyph_1776c31696345.png" alt="Enalapril" width="100"/>  |
-| Ramipril   | CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1\[<C@H>\]2CCC\[<C@H>\]2C\[<C@H>\]1C(O)=O | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpiGpeZe/chemmap_glyph_1776c7df4605a.png" alt="Ramipril" width="100"/>   |
+| Diazepam   | CN1c2ccc(Cl)cc2C(=NCC1=O)c1ccccc1                                                  | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff48b1e17b.png" alt="Diazepam" width="100"/>   |
+| Lorazepam  | OC1N=C(c2ccccc2Cl)c2cc(Cl)ccc2NC1=O                                                | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff164a7786.png" alt="Lorazepam" width="100"/>  |
+| Clonazepam | \[O-\]\[N+\](=O)c1ccc2NC(=O)CN=C(c3ccccc3Cl)c2c1                                   | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff72ed09d8.png" alt="Clonazepam" width="100"/> |
+| Lisinopril | NCCCC[C@H](N%5BC@@H%5D(CCc1ccccc1)C(O)=O)C(=O)N1CCC\[<C@H>\]1C(O)=O                | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff28217eda.png" alt="Lisinopril" width="100"/> |
+| Enalapril  | CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1CCC\[<C@H>\]1C(O)=O                      | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff2f0f2ecb.png" alt="Enalapril" width="100"/>  |
+| Ramipril   | CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1\[<C@H>\]2CCC\[<C@H>\]2C\[<C@H>\]1C(O)=O | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ffdc92990.png" alt="Ramipril" width="100"/>    |

@@ -34,7 +34,7 @@ generate_chem_glyphs <- function(smiles, outdir = tempdir(), bond_col = "black",
       } else {
         col <- bond_col
       }
-      fnames[[i]] <- paste0(tempfile("chemmap_glyph_"), ".png")
+      fnames[[i]] <- paste0(tempfile(tmpdir=outdir, "chemmap_glyph_"), ".png")
       png(res = resolution, fnames[[i]], bg = "transparent")
       #par(bg = NA, mar = rep(0, 4))
       nbonds <- strsplit(s[[1]]@header["Counts_Line"], "\\s+")[[1]][3]

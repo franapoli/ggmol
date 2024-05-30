@@ -140,7 +140,7 @@ tab <- data.frame(
 )
 
 # Generate molecular glyphs and store file paths
-image_files <- generate_chem_glyphs(tab$smiles)
+image_files <- generate_chem_glyphs(tab$smiles, outdir = "example_images")
 
 
 # Convert the image file paths to Markdown image links
