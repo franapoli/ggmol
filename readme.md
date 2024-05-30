@@ -170,23 +170,25 @@ tab <- data.frame(
 )
 
 # Generate molecular glyphs and store file paths
-image_files <- generate_chem_glyphs(tab$smiles, outdir = "example_images")
-
+image_files <- generate_chem_glyphs(tab$smiles)
+moved_files <- file.path("example_images", paste0(1:length(image_files), ".png"))
+for(i in 1:length(image_files))
+  file.rename(image_files[i], moved_files[i])
 
 # Convert the image file paths to Markdown image links
 #tab$image <- sprintf("![%s](%s)", tab$name, image_files)
-tab$image <- sprintf('<img src="%s" alt="%s" width="100"/>', image_files, tab$name)
+tab$image <- sprintf('<img src="%s" alt="%s" width="100"/>', moved_files, tab$name)
 
 
 # Create a Markdown table
 knitr::kable(tab, format = "markdown", col.names = c("Name", "SMILES", "Structure"))
 ```
 
-| Name       | SMILES                                                                             | Structure                                                                                                                              |
-|:-----------|:-----------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------|
-| Diazepam   | CN1c2ccc(Cl)cc2C(=NCC1=O)c1ccccc1                                                  | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff48b1e17b.png" alt="Diazepam" width="100"/>   |
-| Lorazepam  | OC1N=C(c2ccccc2Cl)c2cc(Cl)ccc2NC1=O                                                | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff164a7786.png" alt="Lorazepam" width="100"/>  |
-| Clonazepam | \[O-\]\[N+\](=O)c1ccc2NC(=O)CN=C(c3ccccc3Cl)c2c1                                   | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff72ed09d8.png" alt="Clonazepam" width="100"/> |
-| Lisinopril | NCCCC[C@H](N%5BC@@H%5D(CCc1ccccc1)C(O)=O)C(=O)N1CCC\[<C@H>\]1C(O)=O                | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff28217eda.png" alt="Lisinopril" width="100"/> |
-| Enalapril  | CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1CCC\[<C@H>\]1C(O)=O                      | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ff2f0f2ecb.png" alt="Enalapril" width="100"/>  |
-| Ramipril   | CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1\[<C@H>\]2CCC\[<C@H>\]2C\[<C@H>\]1C(O)=O | <img src="/var/folders/w1/xn1z5v3x50d829xm2167f9n40000gn/T//RtmpynsBqf/chemmap_glyph_178ffdc92990.png" alt="Ramipril" width="100"/>    |
+| Name       | SMILES                                                                             | Structure                                                      |
+|:-----------|:-----------------------------------------------------------------------------------|:---------------------------------------------------------------|
+| Diazepam   | CN1c2ccc(Cl)cc2C(=NCC1=O)c1ccccc1                                                  | <img src="example_images/1.png" alt="Diazepam" width="100"/>   |
+| Lorazepam  | OC1N=C(c2ccccc2Cl)c2cc(Cl)ccc2NC1=O                                                | <img src="example_images/2.png" alt="Lorazepam" width="100"/>  |
+| Clonazepam | \[O-\]\[N+\](=O)c1ccc2NC(=O)CN=C(c3ccccc3Cl)c2c1                                   | <img src="example_images/3.png" alt="Clonazepam" width="100"/> |
+| Lisinopril | NCCCC[C@H](N%5BC@@H%5D(CCc1ccccc1)C(O)=O)C(=O)N1CCC\[<C@H>\]1C(O)=O                | <img src="example_images/4.png" alt="Lisinopril" width="100"/> |
+| Enalapril  | CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1CCC\[<C@H>\]1C(O)=O                      | <img src="example_images/5.png" alt="Enalapril" width="100"/>  |
+| Ramipril   | CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1\[<C@H>\]2CCC\[<C@H>\]2C\[<C@H>\]1C(O)=O | <img src="example_images/6.png" alt="Ramipril" width="100"/>   |
